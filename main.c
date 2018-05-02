@@ -23,6 +23,7 @@ int main()
     int i = 0;
     
     while (M[i] || M[i + 1] || M[i + 2]){
+        printf( "M[%d]: %lu M[M[%d]]: %lu\n", i, M[i], i, M[M[i]] );
         if ((M[M[i]] -= M[M[i + 1]]) < 0){
              i = M[i + 2];
         }

@@ -8,7 +8,8 @@ call malloc_failed
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; 	
 section .data
-    fs_print: DB "%d: buffer-%d",10, 0
+    fs_print: DB "** %d **",10, 0
+    fs_print_loop: DB "%d: buffer-%d",10, 0
     fs_long: DB "%lu", 0
 	fs_malloc_failed: DB "A call to malloc() failed", 10, 0
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -82,42 +83,72 @@ main:
     cmp rcx, qword n
     jne .copy
 
-mov qword cLoop, 0
-.readcheck:
+; mov qword cLoop, 0
+; .readcheck:
 
-    mov rdi, fs_print
-    mov rsi, qword cLoop
-    mov rax, rsi
-    shl rax, 3
-    mov rdx, qword M
-    add rdx, rax
-    mov rdx, [rdx]
-    xor rax, rax
-    call printf
-    add qword cLoop, 1
-    mov rax, qword cLoop
-    cmp rax, qword n
-    jne .readcheck
+;     mov rdi, fs_print
+;     mov rsi, qword cLoop
+;     mov rax, rsi
+;     shl rax, 3
+;     mov rdx, qword M
+;     add rdx, rax
+;     mov rdx, [rdx]
+;     xor rax, rax
+;     call printf
+;     add qword cLoop, 1
+;     mov rax, qword cLoop
+;     cmp rax, qword n
+;     jne .readcheck
 
-    jmp .done
     mov rax, qword M ; rax is the address of M
-    xor rcx, rcx ; i - "instuction pointer"
-    mov qword i, rcx
-    mov r8, qword [rax + rcx] ; M[i] = A
-    mov r9, qword [rax + rcx + 1] ;M[i+1] = B
-    mov r10, qword [rax + rcx + 2] ;M[i+2] = C
+    mov qword i, 0 ; i - "instuction pointer"
+    mov rcx, 0 
+    mov r8, qword [rax + rcx] ; M[0] = A
+
+    ; mov rdi, fs_print
+    ; mov rsi, qword M
+    ; shl r8, 3
+    ; add rsi, r8
+    ; mov rsi, [rsi]
+    ; xor rax, rax
+    ; call printf
+    
+    mov rcx, 1
+    shl rcx, 3
+    mov r9, qword [rax + rcx] ;M[1] = B
+    
+    mov rcx, 2
+    shl rcx, 3
+    mov r10, qword [rax + rcx] ;M[2] = C
 
     jmp .check_SIC
 
 .SIC_LOOP:
     mov rcx, qword i ;set rcx to i
+    shl rcx, 3
     mov r8, qword [rax + rcx] ; M[i]
-    mov r9, qword [rax + rcx + 1] ;M[i+1]
-    mov r10, qword [rax + rcx + 2] ;M[i+2]
     
-    mov rbx, qword [r8] ; M[M[i]]
-    sub rbx, qword [r9] ; M[M[i+1]]
+    mov rcx, qword i ;set rcx to i+1
+    add rcx, 1
+    shl rcx, 3
+    mov r9, qword [rax + rcx] ;M[i+1]
+    
+    mov rcx, qword i ;set rcx to i+2
+    add rcx, 2
+    shl rcx, 3
+    mov r10, qword [rax + rcx] ;M[i+2]
+    
+    mov rbx, qword M
+    shl r8, 3
+    add rbx, r8
+    mov rbx, qword [rbx] ; M[M[i]]
+    
+    mov rcx, qword M
+    shl r9, 3
+    add rcx, r9
+    sub rbx, qword [rcx] ; M[M[i] -= M[M[i+1]]
     cmp rbx, 0x0 ; if ( M[M[i]] -= M[M[i+1]] ) < 0 
+    ;jmp .done
     jge .else
     mov rbx, [r10]
     mov qword i, rbx ; i = M[M[i+3]]
