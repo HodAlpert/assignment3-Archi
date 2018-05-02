@@ -8,9 +8,10 @@ call malloc_failed
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; 	
 section .data
-    fs_print: DB "** %d **",10, 0
+    fs_print: DB "%d",10, 0
+    fs_print2: DB "* %d",10, 0
     fs_print_loop: DB "%d: buffer-%d",10, 0
-    fs_long: DB "%lu", 0
+    fs_long: DB "%lu ", 0
 	fs_malloc_failed: DB "A call to malloc() failed", 10, 0
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; 
@@ -35,12 +36,19 @@ section .text
 %xdefine i qword [rbp-0x18]
 %xdefine bufftemp qword [rbp-0x20]
 %xdefine cLoop qword [rbp-0x28]
+%xdefine M_i qword [rbp-0x30]
+%xdefine M_i1 qword [rbp-0x38]
+%xdefine M_i2 qword [rbp-0x40]
+%xdefine M_M_i qword [rbp-0x48]
+%xdefine M_M_i1 qword [rbp-0x50]
+%xdefine M_M_i2 qword [rbp-0x58]
+
 
 
 
 main:
 
-    enter 0x28,0 ;allocate space for local variables
+    enter 0x58,0 ;allocate space for local variables
     xor rbx, rbx
     mov qword n, -1
 
@@ -82,83 +90,145 @@ main:
     mov rcx, qword cLoop
     cmp rcx, qword n
     jne .copy
+ 
+;  mov qword cLoop, 0
+; .printRes1:
 
-; mov qword cLoop, 0
-; .readcheck:
-
-;     mov rdi, fs_print
-;     mov rsi, qword cLoop
-;     mov rax, rsi
+;     mov rdi, fs_long
+;     mov rax, qword cLoop
 ;     shl rax, 3
-;     mov rdx, qword M
-;     add rdx, rax
-;     mov rdx, [rdx]
+;     mov rsi, qword M
+;     add rsi, rax
+;     mov rsi, [rsi]
 ;     xor rax, rax
 ;     call printf
 ;     add qword cLoop, 1
 ;     mov rax, qword cLoop
 ;     cmp rax, qword n
-;     jne .readcheck
+;     jne .printRes1
 
-    mov rax, qword M ; rax is the address of M
     mov qword i, 0 ; i - "instuction pointer"
     mov rcx, 0 
+    mov rax, qword M
     mov r8, qword [rax + rcx] ; M[0] = A
-
-    ; mov rdi, fs_print
-    ; mov rsi, qword M
-    ; shl r8, 3
-    ; add rsi, r8
-    ; mov rsi, [rsi]
-    ; xor rax, rax
-    ; call printf
+    mov qword M_i, r8
     
     mov rcx, 1
     shl rcx, 3
+    mov rax, qword M
     mov r9, qword [rax + rcx] ;M[1] = B
-    
+    mov qword M_i1, r9
+
     mov rcx, 2
     shl rcx, 3
+    mov rax, qword M
     mov r10, qword [rax + rcx] ;M[2] = C
+    mov qword M_i2, r10
 
     jmp .check_SIC
 
 .SIC_LOOP:
+
     mov rcx, qword i ;set rcx to i
     shl rcx, 3
+    mov rax, qword M
     mov r8, qword [rax + rcx] ; M[i]
-    
+    mov qword M_i, r8
+
     mov rcx, qword i ;set rcx to i+1
     add rcx, 1
     shl rcx, 3
+    mov rax, qword M
     mov r9, qword [rax + rcx] ;M[i+1]
-    
+    mov qword M_i1, r9
+
     mov rcx, qword i ;set rcx to i+2
     add rcx, 2
     shl rcx, 3
+    mov rax, qword M
     mov r10, qword [rax + rcx] ;M[i+2]
+    mov qword M_i2, r10
     
-    mov rbx, qword M
+
+    mov rax, qword M
+    mov r8, qword M_i
     shl r8, 3
-    add rbx, r8
-    mov rbx, qword [rbx] ; M[M[i]]
-    
-    mov rcx, qword M
+    add rax, r8
+    mov rax, qword [rax] ; M[M[i]]
+    mov qword M_M_i, rax
+
+    mov rax, qword M
+    mov r9, qword M_i1
     shl r9, 3
-    add rcx, r9
-    sub rbx, qword [rcx] ; M[M[i] -= M[M[i+1]]
-    cmp rbx, 0x0 ; if ( M[M[i]] -= M[M[i+1]] ) < 0 
-    ;jmp .done
-    jge .else
-    mov rbx, [r10]
-    mov qword i, rbx ; i = M[M[i+3]]
+    add rax, r9
+    mov rax, qword [rax] ; M[M[i+1]]
+    mov qword M_M_i1, rax
+
+    mov rax, qword M
+    mov r9, qword M_i2
+    shl r10, 3
+    add rax, r10
+    mov rax, qword [rax] ; M[M[i+2]]
+    mov qword M_M_i2, rax
+
+    ; M[M[i]] -= M[M[i+1]]
+    mov rbx, qword M_M_i
+    mov rcx, qword M_M_i1
+    sub rbx, rcx 
+    
+    mov rax, qword M
+    mov r8, qword M_i
+    shl r8, 3
+    add rax, r8
+    mov qword [rax], rbx ; M[M[i]] = M[M[i]] - M[M[i+1]]
+    ;mov qword M_M_i, rax
+
+    ;mov rax, qword M_M_i
+    test rbx, rbx ; if ( M[M[i]] -= M[M[i+1]] ) < 0 
+    jns .else
+    
+    mov rax, qword M_i2 ;i = M[i+2]
+    mov qword i, rax
+
     jmp .check_SIC
 
 .else:
     add qword i, 3
     
 .check_SIC:
-    
+    ; mov rdi, fs_print
+    ; mov rsi, qword M_i
+    ; xor rax, rax
+    ; call printf
+
+    ; mov rdi, fs_print
+    ; mov rsi, qword M_i1
+    ; xor rax, rax
+    ; call printf
+
+    ; mov rdi, fs_print
+    ; mov rsi, qword M_i2
+    ; xor rax, rax
+    ; call printf
+
+    ; mov rdi, fs_print2
+    ; mov rsi, qword M_M_i
+    ; xor rax, rax
+    ; call printf
+
+    ; mov rdi, fs_print2
+    ; mov rsi, qword M_M_i1
+    ; xor rax, rax
+    ; call printf
+
+    ; mov rdi, fs_print2
+    ; mov rsi, qword M_M_i2
+    ; xor rax, rax
+    ; call printf
+
+    mov r8, qword M_i
+    mov r9, qword M_i1
+    mov r10, qword M_i2
     OR r8, r9
     OR r8, r10
     cmp r8, 0x0
@@ -166,17 +236,38 @@ main:
 
     cmp qword n, 0x0
     je .done
-    xor rcx, rcx
 
-.print_Loop:
+    mov r8, qword M_i
+    mov rax, qword M
+    mov qword [rax], r8 ; M[i]
+    
+    mov r9, qword M_i1
+    mov rax, qword M
+    mov rcx, 1
+    shl rcx, 3
+    mov qword [rax + rcx], r9 ; M[i]
+
+    mov r10, qword M_i2
+    mov rax, qword M
+    mov rcx, 2
+    shl rcx, 3
+    mov qword [rax + rcx], r10 ; M[i]
+
+    mov qword cLoop, 0
+.printRes:
 
     mov rdi, fs_long
-    mov rax, qword M
-    mov rsi, [rax + rcx]
+    mov rax, qword cLoop
+    shl rax, 3
+    mov rsi, qword M
+    add rsi, rax
+    mov rsi, [rsi]
     xor rax, rax
     call printf
-    cmp rcx, 0x0
-    jne .print_Loop
+    add qword cLoop, 1
+    mov rax, qword cLoop
+    cmp rax, qword n
+    jne .printRes
 
 .done:
 
