@@ -45,14 +45,7 @@ main:
 
 .read:
     add qword n, 1
-    mov rdi, fs_print
-    mov rsi, qword n
-    mov rax, rsi
-    shl rax, 3
-    mov rdx, qword [buffer + rax-8]
-    xor rax, rax
-    call printf
-
+    
     ;scanf("%lu", &buff[n]);
     mov rdi, fs_long
     lea rsi, [rbp-0x20] ; bufftemp
@@ -65,20 +58,7 @@ main:
     cmp eax, -1 ; if we reached EOF
     jne .read
 
-    mov qword cLoop, 0
-.readcheck:
 
-    mov rdi, fs_print
-    mov rsi, qword cLoop
-    mov rax, rsi
-    shl rax, 3
-    mov rdx, qword [buffer+rax]
-    xor rax, rax
-    call printf
-    add qword cLoop, 1
-    mov rax, qword cLoop
-    cmp rax, qword n
-    jne .readcheck
 
     
     ;calloc(n, 8)
@@ -90,15 +70,34 @@ main:
     check_malloc
     mov qword M, rax
 
-    xor rcx, rcx
+    mov qword cLoop, 0
 .copy:
-    
-    mov r8, qword [buffer + rcx]
+    mov rcx, qword cLoop
+    shl rcx, 3 
+    mov rbx, qword [buffer + rcx]
     mov rax, qword M
-    mov qword [rax + rcx], r8
-    inc rcx
+    mov qword [rax + rcx], rbx
+    add qword cLoop, 1
+    mov rcx, qword cLoop
     cmp rcx, qword n
     jne .copy
+
+mov qword cLoop, 0
+.readcheck:
+
+    mov rdi, fs_print
+    mov rsi, qword cLoop
+    mov rax, rsi
+    shl rax, 3
+    mov rdx, qword M
+    add rdx, rax
+    mov rdx, [rdx]
+    xor rax, rax
+    call printf
+    add qword cLoop, 1
+    mov rax, qword cLoop
+    cmp rax, qword n
+    jne .readcheck
 
     jmp .done
     mov rax, qword M ; rax is the address of M
@@ -107,6 +106,7 @@ main:
     mov r8, qword [rax + rcx] ; M[i] = A
     mov r9, qword [rax + rcx + 1] ;M[i+1] = B
     mov r10, qword [rax + rcx + 2] ;M[i+2] = C
+
     jmp .check_SIC
 
 .SIC_LOOP:
