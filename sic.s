@@ -8,7 +8,7 @@ call malloc_failed
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; 	
 section .data
-    fs_print: DB "%d: buffer-%lu",10, 0
+    fs_print: DB "%d: buffer-%d",10, 0
     fs_long: DB "%lu", 0
 	fs_malloc_failed: DB "A call to malloc() failed", 10, 0
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -33,11 +33,13 @@ section .text
 %xdefine n qword [rbp-0x10]
 %xdefine i qword [rbp-0x18]
 %xdefine bufftemp qword [rbp-0x20]
+%xdefine cLoop qword [rbp-0x28]
+
 
 
 main:
 
-    enter 0x20,0 ;allocate space for local variables
+    enter 0x28,0 ;allocate space for local variables
     xor rbx, rbx
     mov qword n, -1
 
@@ -45,7 +47,9 @@ main:
     add qword n, 1
     mov rdi, fs_print
     mov rsi, qword n
-    mov rdx, qword [buffer + rsi-1]
+    mov rax, rsi
+    shl rax, 3
+    mov rdx, qword [buffer + rax-8]
     xor rax, rax
     call printf
 
@@ -56,17 +60,26 @@ main:
     call scanf
     mov rbx, qword bufftemp
     mov rcx, qword n
+    shl rcx, 3
     mov qword [buffer + rcx], rbx
     cmp eax, -1 ; if we reached EOF
     jne .read
 
-    
+    mov qword cLoop, 0
+.readcheck:
+
     mov rdi, fs_print
-    mov rsi, qword n
-    mov rdx, qword [buffer + rsi-1]
+    mov rsi, qword cLoop
+    mov rax, rsi
+    shl rax, 3
+    mov rdx, qword [buffer+rax]
     xor rax, rax
     call printf
-    
+    add qword cLoop, 1
+    mov rax, qword cLoop
+    cmp rax, qword n
+    jne .readcheck
+
     
     ;calloc(n, 8)
     mov rdi, qword n
