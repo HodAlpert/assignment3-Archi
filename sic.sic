@@ -1,0 +1,119 @@
+// conventions: one = 1, zero = 0, minusOne = -1
+
+lstart:
+
+sbn t, t
+sbn t, return_Mi
+sbn C, C
+sbn C, t 				; M[C] = M[return_Mi]
+
+sbn t, t
+sbn t, i
+sbn B, B
+sbn B, t 				; M[B] = M[i]
+sbn t, t
+sbn t, one, F1 			; call F1 M[A] = M[M[B]] , jmp M[C]
+
+return_Mi:
+sbn t, t
+sbn t, A
+sbn Mi, t 				; M[Mi] = M[A] (M[i])
+
+sbn t, t
+sbn t, return_Mi1
+sbn C, C
+sbn C, t 				; M[C] = M[return_Mi]
+
+sbn t, t
+sbn t, i
+sbn B, B
+sbn B, t 				; M[B] = M[i]
+sbn B, minusOne 		; M[B] = M[B] + 1 ( M[i+1] )
+sbn t, t
+sbn t, one, F1 			; call F1 with B = M[i1], C = return_Mi1
+
+return_Mi1:
+sbn t, t
+sbn t, A
+sbn Mi1, t 				; M[Mi1] = M[A] (M[i+1])
+
+sbn t, t
+sbn t, return_Mi2
+sbn C, C
+sbn C, t 				; M[C] = M[return_Mi2]
+
+sbn t, t
+sbn t, i
+sbn B, B
+sbn B, t 				; M[B] = M[i]
+sbn B, minusOne 		; M[B] = M[B] + 1 ( M[i+1] )
+sbn B, minusOne 		; M[B] = M[B] + 1 ( M[i+2] )
+sbn t, t
+sbn t, one, F1 			; call F1 with B = M[i2], C = return_Mi2
+
+return_Mi2:
+sbn t, t
+sbn t, A
+sbn Mi2, t 				; M[Mi2] = M[A] (M[i+2])
+
+while:
+sbn p, p
+sbn p, Mi   ;M[p]=-M[Mi]
+sbn q, q
+sbn q, q   ;M[q] = 0
+sbn p, q, continue    ;   if (M[p] < 0) goto continue
+sbn q, q
+sbn q, p, continue    ; if (M[p]>0) goto continue
+sbn q, q
+sbn p, p
+sbn p, Mi1   ;M[p]=-M[Mi1]
+sbn q, q
+sbn q, q   ;M[q] = 0
+sbn p, q, continue    ;   if (M[p] < 0) goto continue
+sbn q, q
+sbn q, p, continue    ; if (M[p]>0) goto continue
+sbn q, q
+sbn p, p
+sbn p, Mi2   ;M[p]=-M[Mi2]
+sbn q, q
+sbn q, q   ;M[q] = 0
+sbn p, q, continue    ;   if (M[p] < 0) goto continue
+sbn q, q
+sbn q, p, continue    ; if (M[p]>0) goto continue
+sbn q, q
+sbn q, one, lexit
+
+
+
+
+
+
+
+
+; M[A] = M[M[B]] , jmp M[C]
+F1:
+sbn t, t 				; M[t] = M[t] - M[t] = 0
+sbn t, B 				; set M[t] = 0 - M[B]
+sbn L+1, L+1			; M[L+1] = M[L+1] - M[L+1] = 0
+sbn L+1, t 				; M[L+1] = 0 - M[t] = M[B]
+sbn t, t 				; M[t] = 0
+L:
+sbn t, 496351 			; M[t] = 0 - M[L+1] = -M[M[B]]
+sbn A, A 				; M[A] = 0
+sbn A, t 				; set M[A] = 0 - -M[M[B]] = M[M[B]]
+sbn t, t 				; M[t] = 0
+sbn t, one, C 			; if ( 0 < 1 ) jmp C (return address)
+
+p: 90
+q: 90
+continue: 10
+lexit: 100
+M: 258 					; this is where the VM starts to interpert
+i: 0
+minusOne: -1
+one: 1
+zero: 0
+t: 0
+Mi: 0
+Mi1: 0
+Mi2: 0
