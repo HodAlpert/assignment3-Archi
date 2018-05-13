@@ -1,4 +1,7 @@
-// conventions: one = 1, zero = 0, minusOne = -1
+
+sbn t, t
+sbn t, delta
+sbn i, delta
 
 lstart:
 
@@ -17,7 +20,7 @@ sbn t, one, F1 			; call F1 M[A] = M[M[B]] , jmp M[C]
 return_Mi:
 sbn t, t
 sbn t, A
-sbn Mi, t 				; M[Mi] = M[A] (M[i])
+sbn Mi, t 				; M[Mi] = M[A] (=M[i])
 
 sbn t, t
 sbn t, return_Mi1
@@ -59,7 +62,6 @@ sbn Mi2, t 				; M[Mi2] = M[A] (M[i+2])
 while:
 sbn p, p
 sbn p, Mi   ;M[p]=-M[Mi]
-sbn q, q
 sbn q, q   ;M[q] = 0
 sbn p, q, continue    ;   if (M[p] < 0) goto continue
 sbn q, q
@@ -83,11 +85,36 @@ sbn q, p, continue    ; if (M[p]>0) goto continue
 sbn q, q
 sbn q, one, lexit
 
+continue:
 
+sbn t, t
+sbn t, Mi
+sbn M_Mi, t 			; M[M_Mi] = M[Mi]
+sbn t, t
+sbn t, Mi1
+sbn M_Mi1, t 			; M[M_Mi1] = M[Mi1]
+sbn t, t
+sbn t, Mi2
+sbn M_Mi2, t 			; M[M_Mi2] = M[Mi2]
 
+sbn M_Mi, M_Mi1, if
 
+sbn t, t
+sbn t, Mi2
+sbn i, t 				;M[i] = M[Mi2]
+sbn t, t 				
+sbn t, one, lstart
 
+if:
+sbn t, t
+sbn i, minusOne
+sbn i, minusOne
+sbn i, minusOne 		;M[i] = M[i] + 3 (i = i + 3)
+sbn t, t
+sbn t, one, lstart
 
+lexit:
+sbn 0, 0, 0
 
 
 ; M[A] = M[M[B]] , jmp M[C]
@@ -104,10 +131,8 @@ sbn A, t 				; set M[A] = 0 - -M[M[B]] = M[M[B]]
 sbn t, t 				; M[t] = 0
 sbn t, one, C 			; if ( 0 < 1 ) jmp C (return address)
 
-p: 90
-q: 90
-continue: 10
-lexit: 100
+p: 0
+q: 0
 M: 258 					; this is where the VM starts to interpert
 i: 0
 minusOne: -1
@@ -117,3 +142,6 @@ t: 0
 Mi: 0
 Mi1: 0
 Mi2: 0
+M_Mi: 0
+M_Mi1: 0
+M_Mi2: 0
