@@ -1,6 +1,6 @@
 sbn t, t
 sbn t, delta
-sbn i, delta
+sbn i, t
 lstart:
 sbn t, t
 sbn t, return_Mi
@@ -15,6 +15,9 @@ sbn t, one, F1
 return_Mi:
 sbn t, t
 sbn t, A
+sbn Mi, t
+sbn t, t
+sbn t, delta
 sbn Mi, t
 sbn t, t
 sbn t, return_Mi1
@@ -32,6 +35,9 @@ sbn t, t
 sbn t, A
 sbn Mi1, t
 sbn t, t
+sbn t, delta
+sbn Mi1, t
+sbn t, t
 sbn t, return_Mi2
 sbn C, C
 sbn C, t
@@ -46,6 +52,9 @@ sbn t, one, F1
 return_Mi2:
 sbn t, t
 sbn t, A
+sbn Mi2, t
+sbn t, t
+sbn t, delta
 sbn Mi2, t
 while:
 sbn p, p
