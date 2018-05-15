@@ -3,18 +3,13 @@ sbn t, delta
 sbn i, t
 lstart:
 sbn t, t
-sbn t, return_Mi
-sbn C, C
-sbn C, t
-sbn t, t
 sbn t, i
-sbn B, B
-sbn B, t
+sbn load1+1, load1+1
+sbn load1+1, t
 sbn t, t
-sbn t, one, F1
-return_Mi:
-sbn t, t
-sbn t, A
+load1:
+sbn t, 496351
+sbn Mi, Mi
 sbn Mi, t
 sbn t, t
 sbn t, delta
@@ -118,6 +113,12 @@ sbn A, A
 sbn A, t
 sbn t, t
 sbn t, one, C
+A:
+.data-word 0
+B:
+.data-word 0
+C:
+.data-word 0
 p:
 .data-word 0
 q:
@@ -134,12 +135,6 @@ zero:
 .data-word 0
 t:
 .data-word 99
-A:
-.data-word 0
-B:
-.data-word 0
-C:
-.data-word 0
 Mi:
 .data-word 987
 Mi1:
@@ -153,3 +148,4 @@ M_Mi1:
 M_Mi2:
 .data-word 0
 delta:
+.data-word 333

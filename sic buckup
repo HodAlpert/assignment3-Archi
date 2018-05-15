@@ -18,6 +18,7 @@ sbn t, t
 sbn t, one, F1 			; call F1 M[A] = M[M[B]] , jmp M[C]
 
 return_Mi:
+40
 sbn t, t
 sbn t, A
 sbn Mi, t 				; M[Mi] = M[A] (=M[i])
