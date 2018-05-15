@@ -1,0 +1,146 @@
+sbn t, t
+sbn t, delta
+sbn i, delta
+lstart:
+sbn t, t
+sbn t, return_Mi
+sbn C, C
+sbn C, t
+sbn t, t
+sbn t, i
+sbn B, B
+sbn B, t
+sbn t, t
+sbn t, one, F1
+return_Mi:
+sbn t, t
+sbn t, A
+sbn Mi, t
+sbn t, t
+sbn t, return_Mi1
+sbn C, C
+sbn C, t
+sbn t, t
+sbn t, i
+sbn B, B
+sbn B, t
+sbn B, minusOne
+sbn t, t
+sbn t, one, F1
+return_Mi1:
+sbn t, t
+sbn t, A
+sbn Mi1, t
+sbn t, t
+sbn t, return_Mi2
+sbn C, C
+sbn C, t
+sbn t, t
+sbn t, i
+sbn B, B
+sbn B, t
+sbn B, minusOne
+sbn B, minusOne
+sbn t, t
+sbn t, one, F1
+return_Mi2:
+sbn t, t
+sbn t, A
+sbn Mi2, t
+while:
+sbn p, p
+sbn p, Mi
+sbn q, q
+sbn p, q, continue
+sbn q, q
+sbn q, p, continue
+sbn q, q
+sbn p, p
+sbn p, Mi1
+sbn q, q
+sbn q, q
+sbn p, q, continue
+sbn q, q
+sbn q, p, continue
+sbn q, q
+sbn p, p
+sbn p, Mi2
+sbn q, q
+sbn q, q
+sbn p, q, continue
+sbn q, q
+sbn q, p, continue
+sbn q, q
+sbn q, one, lexit
+continue:
+sbn t, t
+sbn t, Mi
+sbn M_Mi, t
+sbn t, t
+sbn t, Mi1
+sbn M_Mi1, t
+sbn t, t
+sbn t, Mi2
+sbn M_Mi2, t
+sbn M_Mi, M_Mi1, if
+sbn t, t
+sbn t, Mi2
+sbn i, t
+sbn t, t
+sbn t, one, lstart
+if:
+sbn t, t
+sbn i, minusOne
+sbn i, minusOne
+sbn i, minusOne
+sbn t, t
+sbn t, one, lstart
+lexit:
+sbn 0, 0, 0
+F1:
+sbn t, t
+sbn t, B
+sbn L+1, L+1
+sbn L+1, t
+sbn t, t
+L:
+sbn t, 496351
+sbn A, A
+sbn A, t
+sbn t, t
+sbn t, one, C
+p:
+.data-word 0
+q:
+.data-word 0
+M:
+.data-word 258
+i:
+.data-word 0
+minusOne:
+.data-word -1
+one:
+.data-word 1
+zero:
+.data-word 0
+t:
+.data-word 99
+A:
+.data-word 0
+B:
+.data-word 0
+C:
+.data-word 0
+Mi:
+.data-word 987
+Mi1:
+.data-word 876
+Mi2:
+.data-word 765
+M_Mi:
+.data-word 0
+M_Mi1:
+.data-word 0
+M_Mi2:
+.data-word 0
+delta:
