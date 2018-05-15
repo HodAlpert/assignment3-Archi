@@ -4,10 +4,10 @@ sbn i, t
 lstart:
 sbn t, t
 sbn t, i
-sbn load1+1, load1+1
-sbn load1+1, t
+sbn load+1, load+1
+sbn load+1, t
 sbn t, t
-load1:
+load:
 sbn t, 496351
 sbn Mi, Mi
 sbn Mi, t
@@ -15,38 +15,28 @@ sbn t, t
 sbn t, delta
 sbn Mi, t
 sbn t, t
-sbn t, return_Mi1
-sbn C, C
-sbn C, t
-sbn t, t
 sbn t, i
-sbn B, B
-sbn B, t
-sbn B, minusOne
+sbn t, minusOne
+sbn load1+1, load1+1
+sbn load1+1, t
 sbn t, t
-sbn t, one, F1
-return_Mi1:
-sbn t, t
-sbn t, A
+load1:
+sbn t, 496351
+sbn Mi1, Mi1
 sbn Mi1, t
 sbn t, t
 sbn t, delta
 sbn Mi1, t
 sbn t, t
-sbn t, return_Mi2
-sbn C, C
-sbn C, t
-sbn t, t
 sbn t, i
-sbn B, B
-sbn B, t
-sbn B, minusOne
-sbn B, minusOne
+sbn t, minusOne
+sbn t, minusOne
+sbn load2+1, load2+1
+sbn load2+1, t
 sbn t, t
-sbn t, one, F1
-return_Mi2:
-sbn t, t
-sbn t, A
+load2:
+sbn t, 496351
+sbn Mi2, Mi2
 sbn Mi2, t
 sbn t, t
 sbn t, delta
@@ -101,24 +91,6 @@ sbn t, t
 sbn t, one, lstart
 lexit:
 sbn 0, 0, 0
-F1:
-sbn t, t
-sbn t, B
-sbn L+1, L+1
-sbn L+1, t
-sbn t, t
-L:
-sbn t, 496351
-sbn A, A
-sbn A, t
-sbn t, t
-sbn t, one, C
-A:
-.data-word 0
-B:
-.data-word 0
-C:
-.data-word 0
 p:
 .data-word 0
 q:
