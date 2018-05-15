@@ -14,9 +14,10 @@ sbn Mi, t
 sbn t, t
 sbn t, delta
 sbn Mi, t
+
 sbn t, t
 sbn t, i
-sbn t, minusOne
+sbn t, one
 sbn load1+1, load1+1
 sbn load1+1, t
 sbn t, t
@@ -27,10 +28,11 @@ sbn Mi1, t
 sbn t, t
 sbn t, delta
 sbn Mi1, t
+
 sbn t, t
 sbn t, i
-sbn t, minusOne
-sbn t, minusOne
+sbn t, one
+sbn t, one
 sbn load2+1, load2+1
 sbn load2+1, t
 sbn t, t
@@ -44,8 +46,11 @@ sbn Mi2, t
 while:
 sbn p, p
 sbn p, Mi
+sbn t, t
+sbn t, p
+sbn t, delta
 sbn q, q
-sbn p, q, continue
+sbn t, q, continue
 sbn q, q
 sbn q, p, continue
 sbn q, q
@@ -76,13 +81,16 @@ sbn M_Mi1, t
 sbn t, t
 sbn t, Mi2
 sbn M_Mi2, t
-sbn M_Mi, M_Mi1, if
+sbn M_Mi, M_Mi1, else
 sbn t, t
 sbn t, Mi2
 sbn i, t
 sbn t, t
+sbn t, delta
+sbn i, t
+sbn t, t
 sbn t, one, lstart
-if:
+else:
 sbn t, t
 sbn i, minusOne
 sbn i, minusOne
@@ -120,4 +128,4 @@ M_Mi1:
 M_Mi2:
 .data-word 0
 delta:
-.data-word 333
+.data-word 279
