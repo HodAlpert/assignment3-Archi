@@ -127,13 +127,13 @@ sbn t, one, lstart
 lexit:
 sbn 0, 0, 0
 p:
-.data-word 99999
+.data-word 0
 q:
-.data-word 99998
+.data-word 0
 M:
-.data-word 258
+.data-word 0
 i:
-.data-word 88888
+.data-word 0
 minusOne:
 .data-word -1
 one:
@@ -141,15 +141,15 @@ one:
 zero:
 .data-word 0
 t:
-.data-word 98765
+.data-word 0
 Mi:
-.data-word 987
+.data-word 0
 Mi1:
 .data-word 0
 Mi2:
 .data-word 0
 M_Mi:
-.data-word 77777
+.data-word 0
 M_Mi1:
 .data-word 0
 delta:
