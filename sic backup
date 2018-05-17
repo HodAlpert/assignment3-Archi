@@ -51,19 +51,30 @@ sbn q, p, continue
 sbn q, q
 sbn q, one, lexit
 continue:
-//TODO should load M[Mi] into M_Mi and not just move in into it as: M_Mi=M[Mi+delta]
-//TODO no need in label M_Mi2- no use for it nowhere
 sbn t, t
 sbn t, Mi
+sbn p, p
+sbn p, delta
+sbn t, p
+sbn load3+1, load3+1
+sbn load3+1, t
+sbn t, t
+load3:
+sbn t, 496351
+sbn M_Mi, M_Mi
 sbn M_Mi, t
 sbn t, t
 sbn t, Mi1
-sbn M_Mi1, t
+sbn p, p
+sbn p, delta
+sbn t, p
+sbn load4+1, load4+1
+sbn load4+1, t
 sbn t, t
-sbn t, Mi2
+load4:
+sbn t, 496351
+sbn M_Mi2, M_Mi2
 sbn M_Mi2, t
-sbn M_Mi, M_Mi1, else
-//TODO from here it is fine
 sbn t, t
 sbn t, Mi2
 sbn i, t
@@ -106,8 +117,6 @@ Mi2:
 M_Mi:
 .data-word 77777
 M_Mi1:
-.data-word 0
-M_Mi2:
 .data-word 0
 delta:
 .data-word 231
