@@ -57,8 +57,8 @@ main:
     lea rsi, [rbp-0x20] ; bufftemp
     xor rax, rax
     call scanf
-    mov rbx, qword bufftemp
-    mov rcx, qword n
+    mov rbx, bufftemp
+    mov rcx, n
     shl rcx, 3
     mov qword [buffer + rcx], rbx
     cmp eax, -1 ; if we reached EOF
