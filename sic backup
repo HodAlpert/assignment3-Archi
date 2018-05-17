@@ -69,21 +69,59 @@ sbn load4+1, t
 sbn t, t
 load4:
 sbn t, 496351
-sbn M_Mi2, M_Mi2
-sbn M_Mi2, t
+sbn M_Mi1, M_Mi1
+sbn M_Mi1, t
+sbn M_Mi, M_Mi1, if
+sbn t, t
+sbn t, Mi
+sbn t, delta
+sbn storeRes, storeRes
+sbn storeRes+1, storeRes+1
+sbn storeRes, t
+sbn storeRes+1, t
+storeRes:
+sbn 496351, 496352
+sbn t, t
+sbn t, Mi
+sbn t, delta
+sbn store, store
+sbn store, t
+sbn t, t
+sbn t, M_Mi
+store:
+sbn 496351, t
+sbn t, t
+sbn i, minusOne
+sbn i, minusOne
+sbn i, minusOne
+sbn t, t
+sbn t, one, lstart
+if:
+sbn t, t
+sbn t, Mi
+sbn t, delta
+sbn storeRes1, storeRes1
+sbn storeRes1+1, storeRes1+1
+sbn storeRes1, t
+sbn storeRes1+1, t
+storeRes1:
+sbn 496351, 496352
+sbn t, t
+sbn t, Mi
+sbn t, delta
+sbn store1, store1
+sbn store1, t
+sbn t, t
+sbn t, M_Mi
+store1:
+sbn 496351, t
 sbn t, t
 sbn t, Mi2
+sbn i, i
 sbn i, t
 sbn t, t
 sbn t, delta
 sbn i, t
-sbn t, t
-sbn t, one, lstart
-else:
-sbn t, t
-sbn i, minusOne
-sbn i, minusOne
-sbn i, minusOne
 sbn t, t
 sbn t, one, lstart
 lexit:
@@ -115,4 +153,4 @@ M_Mi:
 M_Mi1:
 .data-word 0
 delta:
-.data-word 231
+.data-word 356
