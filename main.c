@@ -69,21 +69,20 @@ int main()
     }
 
     while (M[i] || M[i + 1] || M[i + 2]){
+        printf("M[%d]: %lu M[M[%d]]: %d\n",i,M[i],i,M[M[i]]);
+        printf("M[%d]: %lu M[M[%d]]: %d\n",i+1,M[i+1],i+1,M[M[i+1]]);
+        printf("M[%d]: %lu\n",i+2,M[i+2]);
         if ((M[M[i]] -= M[M[i + 1]]) < 0){
-
-            if(i==195){
-                
-            }
              i = M[i + 2];
         }
         else{
              i += 3;
         }
     }
+    printf("%lu\n", M[0]);
 
     for (i = 0; i < n; ++i) {
-
-        printf("%lu ", M[i]);
+        //printf("%lu ", M[i]);
     }
     printf("\n");
     return 0;
