@@ -10,7 +10,7 @@ call malloc_failed
 section .data
     fs_printline: DB 10, 0
     fs_print: DB "%d",10, 0
-    fs_long: DB "%lu ", 0
+    fs_long: DB "%ld ", 0
 	fs_malloc_failed: DB "A call to malloc() failed", 10, 0
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; 
