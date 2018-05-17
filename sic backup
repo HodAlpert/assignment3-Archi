@@ -53,9 +53,7 @@ sbn q, one, lexit
 continue:
 sbn t, t
 sbn t, Mi
-sbn p, p
-sbn p, delta
-sbn t, p
+sbn t, delta
 sbn load3+1, load3+1
 sbn load3+1, t
 sbn t, t
@@ -65,9 +63,7 @@ sbn M_Mi, M_Mi
 sbn M_Mi, t
 sbn t, t
 sbn t, Mi1
-sbn p, p
-sbn p, delta
-sbn t, p
+sbn t, delta
 sbn load4+1, load4+1
 sbn load4+1, t
 sbn t, t
